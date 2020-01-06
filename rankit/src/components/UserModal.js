@@ -78,8 +78,4 @@ class UserModal extends Component {
 	}
 }
 
-const mapStateToProps = state => ({
-	user: state.user
-});
-
-export default connect(mapStateToProps)(UserModal);
+export default UserModal;

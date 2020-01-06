@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AppNavbar from './components/layout/AppNavbar';
-import Landing from './components/layout/Landing';
+import AppNavbar from './components/AppNavbar';
+import LandingPage from './components/LandingPage';
 import Routes from './components/routes/Routes';
 import './App.css';
 
@@ -13,7 +13,7 @@ function App() {
 				<Fragment>
 					<AppNavbar />
 					<Switch>
-						<Route exact path="/" component={Landing} />
+						<Route exact path="/" component={LandingPage} />
 						<Route component={Routes} />
 					</Switch>
 				</Fragment>
