@@ -9,7 +9,6 @@ import {
 	Label,
 	Input
 } from 'reactstrap';
-import { connect } from 'react-redux';
 
 class UserModal extends Component {
 	state = {
