@@ -5,19 +5,23 @@ import AppNavbar from './components/AppNavbar';
 import LandingPage from './components/LandingPage';
 import Routes from './components/routes/Routes';
 import './App.css';
+import store from './store';
+import { Provider } from 'react-redux';
 
 function App() {
 	return (
 		<div className="App">
-			<Router>
-				<Fragment>
-					<AppNavbar />
-					<Switch>
-						<Route exact path="/" component={LandingPage} />
-						<Route component={Routes} />
-					</Switch>
-				</Fragment>
-			</Router>
+			<Provider store={store}>
+				<Router>
+					<Fragment>
+						<AppNavbar />
+						<Switch>
+							<Route exact path="/" component={LandingPage} />
+							<Route component={Routes} />
+						</Switch>
+					</Fragment>
+				</Router>
+			</Provider>
 		</div>
 	);
 }
