@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "adorable-avatars": "^0.4.1",
+    "client": "0.0.1",
     "config": "^3.2.4",
     "express": "^4.17.1",
     "express-validator": "^6.3.1",
