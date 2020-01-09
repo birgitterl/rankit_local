@@ -4,6 +4,60 @@ const { check, validationResult } = require('express-validator');
 
 const User = require('../../models/User');
 
+router.post(
+	'/user',
+	[
+		check('name', 'Name is required')
+			.not()
+			.isEmpty(),
+	],
+	async (req, res) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(400).json({ errors: errors.array() });
+		}
+
+		const name = req.body;
+
+		try {
+			// See if user name exists
+			let user = await User.findOne({ name });
+
+			if (user) {
+				return res.status(400).json({
+					errors: [
+						{
+							msg:
+								'User already exists, please choose another user name'
+						}
+					]
+				});
+			}
+
+			// Fill user object fields
+			const userFields = {};
+			userFields.name = name;
+			userFields.avatar = `/myAvatars/100/${name}`;
+			userFields.location = {};
+			userFields.location.latitude = 14;
+			userFields.location.longitude = 12;
+
+			// Create a new user
+			user = new User(userFields);
+
+			// save user to DB
+			await user.save();
+
+			// Response object
+			await res.status(201).json(user);
+		} catch (err) {
+			console.error(err.message);
+			res.status(500).json({ msg: 'Internal server error' });
+		}
+	}
+);
+
+
 /**
  *@swagger
  * path:
