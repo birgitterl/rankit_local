@@ -1,6 +1,15 @@
 //TODO: Admin-Button, insert name field, submit button
 import React, { Component } from 'react';
-import { Container, Button, Form, Input, FormGroup, FormText, Label, Col } from 'reactstrap';
+import {
+	Container,
+	Button,
+	Form,
+	Input,
+	FormGroup,
+	FormText,
+	Label,
+	Col
+} from 'reactstrap';
 import axios from 'axios';
 
 class LandingPage extends Component {
@@ -27,9 +36,10 @@ class LandingPage extends Component {
 			name: this.state.name
 		};
 
-		axios.post('/api/users/user', userName.name).then(res => console.log(res.data));
+		axios
+			.post('/api/users/user', userName.name)
+			.then(res => console.log(res.data));
 	}
-
 
 	render() {
 		return (
@@ -41,10 +51,15 @@ class LandingPage extends Component {
 					<p>Join the game :-)</p>
 					<Form onSubmit={this.handleSubmit}>
 						<FormGroup row>
-							<Label for="userName" sm={1}>Name:</Label>
+							<Label for="userName" sm={1}>
+								Name:
+							</Label>
 							<Col sm={10}>
-								<Input type="text" value={this.state.name}
-									onChange={this.handleChange} />
+								<Input
+									type="text"
+									value={this.state.name}
+									onChange={this.handleChange}
+								/>
 							</Col>
 						</FormGroup>
 						<Button color="primary">Submit</Button>

@@ -9,7 +9,7 @@ router.post(
 	[
 		check('name', 'Name is required')
 			.not()
-			.isEmpty(),
+			.isEmpty()
 	],
 	async (req, res) => {
 		const errors = validationResult(req);
@@ -27,8 +27,7 @@ router.post(
 				return res.status(400).json({
 					errors: [
 						{
-							msg:
-								'User already exists, please choose another user name'
+							msg: 'User already exists, please choose another user name'
 						}
 					]
 				});
@@ -56,7 +55,6 @@ router.post(
 		}
 	}
 );
-
 
 /**
  *@swagger
@@ -113,8 +111,7 @@ router.post(
 				return res.status(400).json({
 					errors: [
 						{
-							msg:
-								'User already exists, please choose another user name'
+							msg: 'User already exists, please choose another user name'
 						}
 					]
 				});
@@ -279,15 +276,11 @@ router.put('/points/:id', async (req, res) => {
 		// Save updates to database
 		await user.save();
 
-		return res
-			.status(200)
-			.json({ msg: 'User score successfully updated.' });
+		return res.status(200).json({ msg: 'User score successfully updated.' });
 	} catch (err) {
 		console.error(err.message);
 		if (err.kind === 'ObjectId') {
-			return res
-				.status(400)
-				.json({ msg: 'Invalid user ID supplied' });
+			return res.status(400).json({ msg: 'Invalid user ID supplied' });
 		}
 		res.status(500).json({ msg: 'Internal server error' });
 	}
@@ -332,15 +325,11 @@ router.put('/points/reset/:id', async (req, res) => {
 		// Save updates to database
 		await user.save();
 
-		return res
-			.status(200)
-			.json({ msg: 'User score successfully reset.' });
+		return res.status(200).json({ msg: 'User score successfully reset.' });
 	} catch (err) {
 		console.error(err.message);
 		if (err.kind === 'ObjectId') {
-			return res
-				.status(400)
-				.json({ msg: 'Invalid user ID supplied' });
+			return res.status(400).json({ msg: 'Invalid user ID supplied' });
 		}
 		res.status(500).json({ msg: 'Internal server error' });
 	}
@@ -406,9 +395,7 @@ router.put(
 			let user = await User.findById(req.params.id);
 
 			if (!user) {
-				return res
-					.status(404)
-					.json({ msg: 'User not found by id' });
+				return res.status(404).json({ msg: 'User not found by id' });
 			}
 
 			// Update user properties
@@ -423,9 +410,7 @@ router.put(
 		} catch (err) {
 			console.error(err.message);
 			if (err.kind === 'ObjectId') {
-				return res
-					.status(400)
-					.json({ msg: 'Invalid user ID supplied' });
+				return res.status(400).json({ msg: 'Invalid user ID supplied' });
 			}
 			res.status(500).json({ msg: 'Internal server error' });
 		}
@@ -470,9 +455,7 @@ router.delete('/:id', async (req, res) => {
 	} catch (err) {
 		console.error(err.message);
 		if (err.kind === 'ObjectId') {
-			return res
-				.status(400)
-				.json({ msg: 'Invalid user ID supplied' });
+			return res.status(400).json({ msg: 'Invalid user ID supplied' });
 		}
 		res.status(500).json({ msg: 'Internal server error' });
 	}
