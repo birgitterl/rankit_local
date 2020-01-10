@@ -17,7 +17,7 @@ router.post(
 			return res.status(400).json({ errors: errors.array() });
 		}
 
-		const name = req.body;
+		const { name } = req.body;
 
 		try {
 			// See if user name exists
@@ -26,9 +26,7 @@ router.post(
 			if (user) {
 				return res.status(400).json({
 					errors: [
-						{
-							msg: 'User already exists, please choose another user name'
-						}
+						{ msg: 'User already exists, please choose another user name' }
 					]
 				});
 			}
