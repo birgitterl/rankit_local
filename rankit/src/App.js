@@ -7,6 +7,8 @@ import Routes from './components/routes/Routes';
 import './App.css';
 import store from './store';
 import { Provider } from 'react-redux';
+import Alert from './components/alertComponent';
+import { Container } from 'reactstrap';
 
 function App() {
 	return (
@@ -15,6 +17,9 @@ function App() {
 				<Router>
 					<Fragment>
 						<AppNavbar />
+						<Container>
+							<Alert />
+						</Container>
 						<Switch>
 							<Route exact path="/" component={LandingPage} />
 							<Route component={Routes} />

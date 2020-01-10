@@ -6,3 +6,6 @@ export const UPDATE_LOCATION = 'UPDATE_LOCATION';
 export const DELETE_USER = 'DELETE_USER';
 export const DELETE_USERS = 'DELETE_USERS';
 export const USERS_LOADING = 'USERS_LOADING';
+export const SET_ALERT = 'SET_ALERT';
+export const REMOVE_ALERT = 'REMOVE_ALERT';
+export const USER_ERROR = 'USER_ERROR';

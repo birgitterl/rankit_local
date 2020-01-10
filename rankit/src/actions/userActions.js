@@ -7,6 +7,7 @@ import {
 	GET_USERS,
 	USERS_LOADING
 } from './types';
+import { setAlert } from './alertActions';
 
 //TODO add updateVote and updateLocation methods
 
@@ -29,13 +30,20 @@ export const getUser = id => dispatch => {
 	);
 };
 
-export const addUser = user => dispatch => {
-	axios.post('api/users/user', user).then(res =>
+export const addUser = user => async dispatch => {
+	try {
+		const res = await axios.post('api/users/user', user);
 		dispatch({
 			type: ADD_USER,
 			payload: res.data
-		})
-	);
+		});
+		dispatch(setAlert('User added', 'success'));
+	} catch (err) {
+		const errors = err.response.data.errors;
+		if (errors) {
+			errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+		}
+	}
 };
 
 export const deleteUser = id => dispatch => {
