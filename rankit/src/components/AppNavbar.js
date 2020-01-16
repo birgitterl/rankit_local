@@ -1,4 +1,7 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { logout } from '../actions/userActions';
 import {
 	Collapse,
 	Navbar,
@@ -10,34 +13,41 @@ import {
 	Container
 } from 'reactstrap';
 
-class AppNavbar extends Component {
-	state = { isOpen: false };
+const AppNavbar = ({ logout }) => {
+	const [isOpen, setIsOpen] = useState(false);
 
-	toggle = () => {
-		this.setState({
-			isOpen: !this.state.isOpen
-		});
-	};
+	const toggle = () => setIsOpen(!isOpen);
 
-	render() {
-		return (
-			<div>
-				<Navbar className="mb-5" color="dark" dark expand="sm">
-					<Container>
-						<NavbarBrand href="/">Rankit</NavbarBrand>
-						<NavbarToggler onClick={this.toggle} />
-						<Collapse isOpen={this.state.isOpen} navbar>
-							<Nav className="ml-auto" navbar>
-								<NavItem>
-									<NavLink href="/adminHub">Admin Hub</NavLink>
-								</NavItem>
-							</Nav>
-						</Collapse>
-					</Container>
-				</Navbar>
-			</div>
-		);
-	}
-}
+	return (
+		<div>
+			<Navbar className="mb-5" color="dark" dark expand="sm">
+				<Container>
+					<NavbarBrand href="/">Rankit</NavbarBrand>
+					<NavbarToggler onClick={toggle} />
+					<Collapse isOpen={isOpen} navbar>
+						<Nav className="ml-auto" navbar>
+							<NavItem>
+								<NavLink href="/adminHub">Admin Hub</NavLink>
+							</NavItem>
+							<NavItem>
+								<NavLink href="/" onClick={logout}>
+									Logout
+								</NavLink>
+							</NavItem>
+						</Nav>
+					</Collapse>
+				</Container>
+			</Navbar>
+		</div>
+	);
+};
 
-export default AppNavbar;
+AppNavbar.propTypes = {
+	logout: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+	auth: state.userReducer
+});
+
+export default connect(mapStateToProps, { logout })(AppNavbar);
