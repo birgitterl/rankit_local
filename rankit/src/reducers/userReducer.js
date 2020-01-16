@@ -8,7 +8,8 @@ import {
 	GET_USER,
 	UPDATE_LOCATION,
 	UPDATE_VOTE,
-	USER_ERROR
+	USER_ERROR,
+	LOGOUT
 } from '../actions/types';
 
 const initialState = {
@@ -65,7 +66,7 @@ export default function(state = initialState, action) {
 			};
 
 		case REGISTER_FAIL:
-		case DELETE_USER:
+		case LOGOUT:
 			localStorage.removeItem('token');
 			return {
 				...state,

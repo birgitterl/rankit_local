@@ -5,6 +5,15 @@ const swaggerDefinition = {
 		title: 'Rankit API',
 		version: '1.0.0',
 		description: 'REST API for the Rankit Application'
+	},
+	securityDefinitions: {
+		bearerAuth: {
+			type: 'apiKey',
+			name: 'x-auth-token',
+			scheme: 'bearer',
+			bearerFormat: 'JWT',
+			in: 'header'
+		}
 	}
 };
 

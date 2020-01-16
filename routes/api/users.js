@@ -6,6 +6,7 @@ const config = require('config');
 const auth = require('../../middleware/authMiddleware');
 const User = require('../../models/User');
 
+// TODO needs to be eliminated after location fetching is implemented in the frontend
 router.post(
 	'/user',
 	[
@@ -63,9 +64,6 @@ router.post(
 					res.json({ token });
 				}
 			);
-
-			// Response object
-			//await res.status(201).json(user);
 		} catch (err) {
 			console.error(err.message);
 			res.status(500).json({ msg: 'Internal server error' });
@@ -91,8 +89,6 @@ router.post(
  *      responses:
  *        '201':
  *          description: User successfully created
- *          schema:
- *            $ref: '#/definitions/User'
  *        '400':
  *          description: Invalid Input
  *        '500':
@@ -148,8 +144,22 @@ router.post(
 			// save user to DB
 			await user.save();
 
-			// Response object
-			await res.status(201).json(user);
+			// Return jsonwebtoken (change expires to 3600)
+			const payload = {
+				user: {
+					id: user.id
+				}
+			};
+
+			jwt.sign(
+				payload,
+				config.get('jwtSecret'),
+				{ expiresIn: 360000 },
+				(err, token) => {
+					if (err) throw err;
+					res.json({ token });
+				}
+			);
 		} catch (err) {
 			console.error(err.message);
 			res.status(500).json({ msg: 'Internal server error' });
@@ -168,6 +178,10 @@ router.post(
  *      responses:
  *        '200':
  *          description: OK
+ *          schema:
+ *             type: "array"
+ *             items:
+ *               $ref: '#/definitions/User'
  *        '500':
  *          description: Internal server error
  */
@@ -194,12 +208,14 @@ router.get('/', async (req, res) => {
  *       responses:
  *         "200":
  *           description: All users removed
+ *           schema:
+ *             $ref: '#/definitions/User'
  *         "500":
  *           description: Internal server error
  */
 router.delete('/', async (req, res) => {
 	try {
-		const users = await User.remove();
+		await User.remove();
 
 		await res.status(200).json({ msg: 'All users removed' });
 	} catch (err) {
@@ -257,76 +273,18 @@ router.get('/:id', async (req, res) => {
 /**
  * @swagger
  * path:
- *   /api/users/me:
- *     get:
- *       tags:
- *         - users
- *       summary: Get current user profile
- *       security:
- *         - bearerAuth:
- *           type: http
- *           scheme: bearer
- *           bearerFormat: JWT
- *       parameters:
- *         - name: :id
- *           in: path
- *           description: ID of the user that needs to be returned
- *           required: true
- *           type: string
- *       responses:
- *         "200":
- *           description: successful operation
- *           schema:
- *             $ref: '#/definitions/User'
- *         "404":
- *           description: User not found by id
- *         "400":
- *           description: Invalid ID supplied
- *         "500":
- *           description: Internal server error
- *
- */
-router.get('/me', auth, async (req, res) => {
-	try {
-		// Finds the user by his id provided in the path parameters
-		const user = await User.findById(req.user.id);
-
-		if (!user) {
-			return res.status(404).json({ msg: 'User not found by id' });
-		}
-		await res.status(200).json(user);
-	} catch (err) {
-		console.error(err.message);
-		// check if id has invalid format
-		if (err.kind === 'ObjectId') {
-			return res.status(404).json({ msg: 'User not found by id' });
-		}
-		res.status(500).json({ msg: 'Internal server error' });
-	}
-});
-
-/**
- * @swagger
- * path:
  *   /api/users/points:
  *     put:
  *       tags:
  *         - users
  *       summary: Increase points for a user with a given user id
  *       security:
- *         - bearerAuth:
- *           type: http
- *           scheme: bearer
- *           bearerFormat: JWT
- *       parameters:
- *         - name: :id
- *           in: path
- *           description: ID of the user that needs to be updated
- *           required: true
- *           type: string
+ *         - bearerAuth: []
  *       responses:
  *         "200":
  *           description: User score successfully updated
+ *           schema:
+ *             $ref: '#/definitions/User'
  *         "404":
  *           description: User not found by id
  *         "400":
@@ -349,7 +307,7 @@ router.put('/points', auth, async (req, res) => {
 		// Save updates to database
 		await user.save();
 
-		return res.status(200).json({ msg: 'User score successfully updated.' });
+		await res.status(200).json(user);
 	} catch (err) {
 		console.error(err.message);
 		if (err.kind === 'ObjectId') {
@@ -367,15 +325,13 @@ router.put('/points', auth, async (req, res) => {
  *       tags:
  *         - users
  *       summary: Reset point score for a user with a given user id
- *       parameters:
- *         - name: :id
- *           in: path
- *           description: ID of the user whose score needs to be reset
- *           required: true
- *           type: string
+ *       security:
+ *         - bearerAuth: []
  *       responses:
  *         "200":
  *           description: User score successfully reset
+ *           schema:
+ *             $ref: '#/definitions/User'
  *         "404":
  *           description: User not found by id
  *         "400":
@@ -397,8 +353,7 @@ router.put('/points/reset', auth, async (req, res) => {
 
 		// Save updates to database
 		await user.save();
-
-		return res.status(200).json({ msg: 'User score successfully reset.' });
+		await res.status(200).json({ msg: 'User score successfully reset.' });
 	} catch (err) {
 		console.error(err.message);
 		if (err.kind === 'ObjectId') {
@@ -416,12 +371,9 @@ router.put('/points/reset', auth, async (req, res) => {
  *       tags:
  *         - users
  *       summary: Update location of a user with a given user id
+ *       security:
+ *         - bearerAuth: []
  *       parameters:
- *         - name: :id
- *           in: path
- *           description: ID of the user that needs to be updated
- *           required: true
- *           type: string
  *         - in: body
  *           name: body
  *           description: Location parameters that need to be updated
@@ -436,6 +388,8 @@ router.put('/points/reset', auth, async (req, res) => {
  *       responses:
  *         "200":
  *           description: User location successfully updated
+ *           schema:
+ *             $ref: '#/definitions/User'
  *         "404":
  *           description: User not found by id
  *         "400":
@@ -480,9 +434,7 @@ router.put(
 
 			await user.save();
 
-			return res
-				.status(200)
-				.json({ msg: 'User location successfully updated.' });
+			return res.status(200).json(user);
 		} catch (err) {
 			console.error(err.message);
 			if (err.kind === 'ObjectId') {

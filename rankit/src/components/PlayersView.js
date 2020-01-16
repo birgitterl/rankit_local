@@ -4,11 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from './Spinner';
 
-const PlayersView = ({ getCurrentUser, updateVote, auth: { user } }) => {
-	useEffect(() => {
-		getCurrentUser();
-	}, [getCurrentUser]);
-
+const PlayersView = ({ updateVote, auth: { user } }) => {
 	return user === null ? (
 		<Spinner />
 	) : (
@@ -43,6 +39,4 @@ const mapStateToProps = state => ({
 	auth: state.userReducer
 });
 
-export default connect(mapStateToProps, { getCurrentUser, updateVote })(
-	PlayersView
-);
+export default connect(mapStateToProps, { updateVote })(PlayersView);

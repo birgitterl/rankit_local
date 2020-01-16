@@ -66,7 +66,7 @@ export const registerUser = ({ name }) => async dispatch => {
 
 // Logout / Clear Profile
 export const logout = () => dispatch => {
-	dispatch({ type: DELETE_USER });
+	dispatch({ type: LOGOUT });
 };
 
 // Delete a user by id
@@ -111,7 +111,7 @@ export const getUser = id => dispatch => {
 // Get current user
 export const getCurrentUser = () => async dispatch => {
 	try {
-		const res = await axios.get('/api/users/me');
+		const res = await axios.get('/api/users/:id');
 		dispatch({
 			type: GET_USER,
 			payload: res.data
@@ -142,7 +142,6 @@ export const updateVote = () => async dispatch => {
 			type: UPDATE_VOTE,
 			payload: res.data
 		});
-		dispatch(loadUser());
 	} catch (err) {
 		dispatch({
 			type: USER_ERROR,

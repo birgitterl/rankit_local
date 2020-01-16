@@ -1,6 +1,6 @@
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAIL = 'REGISTER_FAIL';
-export const GET_USER = 'GET_USERS';
+export const GET_USER = 'GET_USER';
 export const GET_USERS = 'GET_USERS';
 export const UPDATE_VOTE = 'UPDATE_VOTE';
 export const UPDATE_LOCATION = 'UPDATE_LOCATION';
