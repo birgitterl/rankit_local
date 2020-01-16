@@ -21,7 +21,7 @@ class AdminHub extends Component {
 	}
 
 	componentDidMount() {
-		this.state = { name: '' };
+		this.setState = { name: '' };
 	}
 
 	clickAction() {
