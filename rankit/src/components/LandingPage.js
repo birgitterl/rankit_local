@@ -1,90 +1,100 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment, useState } from 'react';
 import { connect } from 'react-redux';
-import { addUser } from '../actions/userActions';
-import { Container, Button, Form, Input, FormGroup, Label } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
+import { registerUser } from '../actions/userActions';
+import { setAlert } from '../actions/alertActions';
+import { Button, Form, Input, FormGroup } from 'reactstrap';
+import PropTypes from 'prop-types';
 
-class LandingPage extends Component {
-	state = {
+const LandingPage = ({ registerUser, isAuthenticated }) => {
+	const [formData, setFormData] = useState({
 		name: ''
+	});
+
+	const { name } = formData;
+
+	const onChange = e => {
+		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-	onChange = e => {
-		this.setState({ [e.target.name]: e.target.value });
-	};
-
-	onSubmit = e => {
+	const onSubmit = async e => {
 		e.preventDefault();
+		// add a user
+		registerUser({ name });
+	};
+
+	// Redirect if authenticated
+	if (isAuthenticated) {
+		return <Redirect to="/playersView" />;
+	}
+
+	return (
+		<Fragment>
+			<h2 className="text-center">Welcome to Rankit</h2>
+			<br />
+			<p className="text-center">Enter your name to join the game</p>
+			<Form onSubmit={e => onSubmit(e)}>
+				<FormGroup>
+					<Input
+						type="text"
+						name="name"
+						value={name}
+						placeholder="Enter your name"
+						onChange={e => onChange(e)}
+					/>
+				</FormGroup>
+				<Button color="dark" style={{ marginTop: '2rem' }} block>
+					Enter
+				</Button>
+			</Form>
+		</Fragment>
+	);
+};
+
+LandingPage.propTypes = {
+	registerUser: PropTypes.func.isRequired,
+	setAlert: PropTypes.func.isRequired,
+	isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+	isAuthenticated: state.userReducer.isAuthenticated
+});
+
+export default connect(mapStateToProps, { registerUser, setAlert })(
+	LandingPage
+);
+/*
+class LandingPage extends Component {
+	constructor(props) {
+		super(props);
+		this.state = { name: '' };
+	}
+
+	componentDidMount() {
+		if(this.props.auth.isAuthenticated) {
+			this.props.history.push(/playersView);
+		}
+	}
+
+
+	handleChange = e =>{
+		this.setState({[e.target.name] : e.target.value });
+	};
+
+	handleSubmit = e => {
+		//alert('A name was submitted: ' + this.state.value);
+		e.preventDefault();
+
 		const newUser = {
 			name: this.state.name
 		};
 
-		//Add user via addUser action
-		this.props.addUser(newUser);
-	};
-
-	render() {
-		return (
-			<div>
-				<Container>
-					<h2 className="text-center">Welcome to Rankit</h2>
-					<br />
-					<p className="text-center">Enter your name to join the game</p>
-					<Form onSubmit={this.onSubmit}>
-						<FormGroup>
-							<Label for="name">Name</Label>
-							<Input
-								type="text"
-								name="name"
-								id="name"
-								placeholder="Enter your name"
-								onChange={this.onChange}
-							/>
-						</FormGroup>
-						<Button color="dark" style={{ marginTop: '2rem' }} block>
-							Enter
-						</Button>
-					</Form>
-				</Container>
-			</div>
-		);
-	}
-}
-
-const mapStateToProps = state => ({
-	user: state.user
-});
-
-export default connect(mapStateToProps, { addUser })(LandingPage);
-
-/*constructor(props) {
-		super(props);
-		this.state = { name: '' };
-
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-	}
-
-	handleChange(event) {
-		this.setState({ name: event.target.value });
-	}
-
-	handleSubmit(event) {
-		//alert('A name was submitted: ' + this.state.value);
-		event.preventDefault();
-
-		console.log(`Form submitted:`);
-		console.log(`User Name: ${this.state.name}`);
-
-		const userName = {
-			name: this.state.name
-		};
-
-		axios
-			.post('/api/users/user', userName.name)
-			.then(res => console.log(res.data));
+	this.props.registerUser(newUser, this.props.history);
 	}
 
 	render() {
+		const {errors} = this.state;
 		return (
 			<div>
 				<Container>
