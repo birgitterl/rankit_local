@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://client:client@rankit-bu6bg.mongodb.net/test?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://client:client@rankit-bu6bg.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "mysecrettoken"
 }

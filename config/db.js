@@ -4,6 +4,7 @@ const db = config.get('mongoURI');
 
 const connectDB = async () => {
 	try {
+		//await mongoose.connect('mongodb://localhost:27017/rankit', {
 		await mongoose.connect(db, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,

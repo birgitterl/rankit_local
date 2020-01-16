@@ -20,6 +20,7 @@ app.get('/', (req, res) => res.send('API Running'));
 
 // Define middleware:
 app.use('/api/users', require('./routes/api/users'));
+app.use('/api/auth', require('./routes/api/auth'));
 
 // Swagger documentation setup - available under 'localhost:5000/api-docs':
 app.use(
