@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
-
+const jwt = require('jsonwebtoken');
+const config = require('config');
+const auth = require('../../middleware/authMiddleware');
 const User = require('../../models/User');
 
 router.post(
@@ -45,8 +47,25 @@ router.post(
 			// save user to DB
 			await user.save();
 
+			// Return jsonwebtoken (change expires to 3600)
+			const payload = {
+				user: {
+					id: user.id
+				}
+			};
+
+			jwt.sign(
+				payload,
+				config.get('jwtSecret'),
+				{ expiresIn: 360000 },
+				(err, token) => {
+					if (err) throw err;
+					res.json({ token });
+				}
+			);
+
 			// Response object
-			await res.status(201).json(user);
+			//await res.status(201).json(user);
 		} catch (err) {
 			console.error(err.message);
 			res.status(500).json({ msg: 'Internal server error' });
@@ -196,7 +215,7 @@ router.delete('/', async (req, res) => {
  *     get:
  *       tags:
  *         - users
- *       summary: Get current user profile by user ID
+ *       summary: Get user profile by user ID
  *       parameters:
  *         - name: :id
  *           in: path
@@ -238,11 +257,67 @@ router.get('/:id', async (req, res) => {
 /**
  * @swagger
  * path:
- *   /api/users/points/{:id}:
+ *   /api/users/me:
+ *     get:
+ *       tags:
+ *         - users
+ *       summary: Get current user profile
+ *       security:
+ *         - bearerAuth:
+ *           type: http
+ *           scheme: bearer
+ *           bearerFormat: JWT
+ *       parameters:
+ *         - name: :id
+ *           in: path
+ *           description: ID of the user that needs to be returned
+ *           required: true
+ *           type: string
+ *       responses:
+ *         "200":
+ *           description: successful operation
+ *           schema:
+ *             $ref: '#/definitions/User'
+ *         "404":
+ *           description: User not found by id
+ *         "400":
+ *           description: Invalid ID supplied
+ *         "500":
+ *           description: Internal server error
+ *
+ */
+router.get('/me', auth, async (req, res) => {
+	try {
+		// Finds the user by his id provided in the path parameters
+		const user = await User.findById(req.user.id);
+
+		if (!user) {
+			return res.status(404).json({ msg: 'User not found by id' });
+		}
+		await res.status(200).json(user);
+	} catch (err) {
+		console.error(err.message);
+		// check if id has invalid format
+		if (err.kind === 'ObjectId') {
+			return res.status(404).json({ msg: 'User not found by id' });
+		}
+		res.status(500).json({ msg: 'Internal server error' });
+	}
+});
+
+/**
+ * @swagger
+ * path:
+ *   /api/users/points:
  *     put:
  *       tags:
  *         - users
  *       summary: Increase points for a user with a given user id
+ *       security:
+ *         - bearerAuth:
+ *           type: http
+ *           scheme: bearer
+ *           bearerFormat: JWT
  *       parameters:
  *         - name: :id
  *           in: path
@@ -260,12 +335,12 @@ router.get('/:id', async (req, res) => {
  *           description: Internal server error
  *
  */
-router.put('/points/:id', async (req, res) => {
+router.put('/points', auth, async (req, res) => {
 	try {
-		let user = await User.findById(req.params.id);
+		let user = await User.findById(req.user.id);
 
 		if (!user) {
-			return res.status(404).json({ msg: 'User not found by id' });
+			return res.status(404).json({ msg: 'User not found by id' }, user);
 		}
 
 		// Change user points --> increase by 1
@@ -287,7 +362,7 @@ router.put('/points/:id', async (req, res) => {
 /**
  * @swagger
  * path:
- *   /api/users/points/reset/{:id}:
+ *   /api/users/points/reset:
  *     put:
  *       tags:
  *         - users
@@ -309,9 +384,9 @@ router.put('/points/:id', async (req, res) => {
  *           description: Internal server error
  *
  */
-router.put('/points/reset/:id', async (req, res) => {
+router.put('/points/reset', auth, async (req, res) => {
 	try {
-		let user = await User.findById(req.params.id);
+		let user = await User.findById(req.user.id);
 
 		if (!user) {
 			return res.status(404).json({ msg: 'User not found by id' });
@@ -336,7 +411,7 @@ router.put('/points/reset/:id', async (req, res) => {
 /**
  * @swagger
  * path:
- *   /api/users/location/{:id}:
+ *   /api/users/location/:
  *     put:
  *       tags:
  *         - users
@@ -370,15 +445,18 @@ router.put('/points/reset/:id', async (req, res) => {
  *
  */
 router.put(
-	'/location/:id',
-	//checks for required fields and throws error array if failed
+	'/location',
 	[
-		check('latitude', 'Location latitude is required')
-			.not()
-			.isEmpty(),
-		check('longitude', 'Location longitude is required')
-			.not()
-			.isEmpty()
+		auth,
+		[
+			//checks for required fields and throws error array if failed
+			(check('latitude', 'Location latitude is required')
+				.not()
+				.isEmpty(),
+			check('longitude', 'Location longitude is required')
+				.not()
+				.isEmpty())
+		]
 	],
 	async (req, res) => {
 		const errors = validationResult(req);
@@ -390,7 +468,7 @@ router.put(
 		const { latitude, longitude } = req.body;
 
 		try {
-			let user = await User.findById(req.params.id);
+			let user = await User.findById(req.user.id);
 
 			if (!user) {
 				return res.status(404).json({ msg: 'User not found by id' });
@@ -418,7 +496,7 @@ router.put(
 /**
  * @swagger
  * path:
- *   /api/users/{:id}:
+ *   /api/users/me:
  *     delete:
  *       tags:
  *         - users
@@ -440,9 +518,9 @@ router.put(
  *           description: Internal server error
  *
  */
-router.delete('/:id', async (req, res) => {
+router.delete('me', auth, async (req, res) => {
 	try {
-		const user = await User.findById(req.params.id);
+		const user = await User.findById(req.user.id);
 
 		if (!user) {
 			return res.status(404).json({ msg: 'User not found by id' });

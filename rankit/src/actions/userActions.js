@@ -1,18 +1,95 @@
 import axios from 'axios';
 import {
-	ADD_USER,
-	DELETE_USER,
-	DELETE_USERS,
 	GET_USER,
 	GET_USERS,
-	USERS_LOADING
+	DELETE_USER,
+	DELETE_USERS,
+	USER_ERROR,
+	USER_LOADED,
+	AUTH_ERROR,
+	REGISTER_SUCCESS,
+	REGISTER_FAIL,
+	LOGOUT,
+	UPDATE_VOTE
 } from './types';
+import setAuthToken from '../utils/setAuthToken';
 import { setAlert } from './alertActions';
 
-//TODO add updateVote and updateLocation methods
+// Load User
+export const loadUser = () => async dispatch => {
+	if (localStorage.token) {
+		setAuthToken(localStorage.token);
+	}
 
+	try {
+		const res = await axios.get('/api/auth');
+
+		dispatch({
+			type: USER_LOADED,
+			payload: res.data
+		});
+	} catch (err) {
+		dispatch({
+			type: AUTH_ERROR
+		});
+	}
+};
+
+// Register a user
+export const registerUser = ({ name }) => async dispatch => {
+	const config = {
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	};
+	const body = JSON.stringify({ name });
+
+	try {
+		const res = await axios.post('api/users/user', body, config);
+		dispatch({
+			type: REGISTER_SUCCESS,
+			payload: res.data
+		});
+
+		await dispatch(loadUser());
+	} catch (err) {
+		const errors = err.response.data.errors;
+		if (errors) {
+			errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+		}
+		dispatch({
+			type: REGISTER_FAIL,
+			payload: { msg: err.response.statusText, status: err.response.status }
+		});
+	}
+};
+
+// Logout / Clear Profile
+export const logout = () => dispatch => {
+	dispatch({ type: DELETE_USER });
+};
+
+// Delete a user by id
+export const bla = id => async dispatch => {
+	if (window.confirm('Are you sure? You user will be permanently deleted')) {
+		try {
+			await axios.delete(`/api/users/${id}`);
+
+			dispatch({
+				type: DELETE_USER
+			});
+			dispatch(setAlert('Your user has been permanently deleted'));
+		} catch (err) {
+			dispatch({
+				type: USER_ERROR,
+				payload: { msg: err.response.statusText, status: err.response.status }
+			});
+		}
+	}
+};
+
+// Get all Users
 export const getUsers = () => dispatch => {
-	dispatch(setUsersLoading());
 	axios.get('/api/users').then(res =>
 		dispatch({
 			type: GET_USERS,
@@ -21,6 +98,7 @@ export const getUsers = () => dispatch => {
 	);
 };
 
+// Get user by ID
 export const getUser = id => dispatch => {
 	axios.get(`/api/users/${id}`).then(res =>
 		dispatch({
@@ -30,31 +108,23 @@ export const getUser = id => dispatch => {
 	);
 };
 
-export const addUser = user => async dispatch => {
+// Get current user
+export const getCurrentUser = () => async dispatch => {
 	try {
-		const res = await axios.post('api/users/user', user);
+		const res = await axios.get('/api/users/me');
 		dispatch({
-			type: ADD_USER,
+			type: GET_USER,
 			payload: res.data
 		});
-		dispatch(setAlert('User added', 'success'));
 	} catch (err) {
-		const errors = err.response.data.errors;
-		if (errors) {
-			errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
-		}
+		dispatch({
+			type: USER_ERROR,
+			payload: { msg: err.response.statusText, status: err.response.status }
+		});
 	}
 };
 
-export const deleteUser = id => dispatch => {
-	axios.delete(`/api/users/${id}`).then(res =>
-		dispatch({
-			type: DELETE_USER,
-			payload: id
-		})
-	);
-};
-
+// delete all users
 export const deleteUsers = () => dispatch => {
 	axios.delete('api/users').then(res =>
 		dispatch({
@@ -64,8 +134,19 @@ export const deleteUsers = () => dispatch => {
 	);
 };
 
-export const setUsersLoading = () => {
-	return {
-		type: USERS_LOADING
-	};
+//update votes
+export const updateVote = () => async dispatch => {
+	try {
+		const res = await axios.put(`api/users/points`);
+		dispatch({
+			type: UPDATE_VOTE,
+			payload: res.data
+		});
+		dispatch(loadUser());
+	} catch (err) {
+		dispatch({
+			type: USER_ERROR,
+			payload: { msg: err.response.statusText, status: err.response.status }
+		});
+	}
 };
