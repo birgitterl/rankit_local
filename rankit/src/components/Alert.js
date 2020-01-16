@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Alert } from 'reactstrap';
 import { connect } from 'react-redux';
 
-const alertComponent = ({ alerts }) =>
+const alert = ({ alerts }) =>
 	alerts !== null &&
 	alerts.length > 0 &&
 	alerts.map(alert => (
@@ -20,4 +20,4 @@ const mapStateToProps = state => ({
 	alerts: state.alertReducer
 });
 
-export default connect(mapStateToProps)(alertComponent);
+export default connect(mapStateToProps)(alert);
