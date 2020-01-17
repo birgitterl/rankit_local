@@ -1,4 +1,3 @@
-//TODO: Admin-Button, insert name field, submit button
 import React, { Component } from 'react';
 import axios from 'axios';
 import {
@@ -11,7 +10,9 @@ import {
 	Label,
 	Col
 } from 'reactstrap';
-import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
+import LocationMap from './LocationMap';
+import UserList from './UserList';
+
 
 class AdminHub extends Component {
 	constructor(props) {
@@ -48,13 +49,16 @@ class AdminHub extends Component {
 						Get
 					</Button>
 				</Container>
-				<Map center={[45, -75]} zoom={12}>
-					<TileLayer
-						url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-						attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-					/>
-				</Map>
-			</div>
+
+				<div class="list">
+					<UserList />
+				</div>
+				<div class="map">
+					<LocationMap />
+				</div>
+
+
+			</div >
 		);
 	}
 }
