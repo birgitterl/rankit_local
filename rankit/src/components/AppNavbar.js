@@ -30,6 +30,9 @@ const AppNavbar = ({ logout }) => {
 								<NavLink href="/adminHub">Admin Hub</NavLink>
 							</NavItem>
 							<NavItem>
+								<NavLink href="/userList">UserList</NavLink>
+							</NavItem>
+							<NavItem>
 								<NavLink href="/" onClick={logout}>
 									Logout
 								</NavLink>

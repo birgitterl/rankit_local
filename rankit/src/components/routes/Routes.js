@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import AdminHub from '../AdminHub';
 import PlayersView from '../PlayersView';
+import UserList from '../UserListBirgit';
 import Container from 'reactstrap/es/Container';
 
 const Routes = () => {
@@ -10,6 +11,7 @@ const Routes = () => {
 			<Switch>
 				<Route exact path="/playersView" component={PlayersView} />
 				<Route exact path="/adminHub" component={AdminHub} />
+				<Route exact path="/userList" component={UserList} />
 			</Switch>
 		</Container>
 	);

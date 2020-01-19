@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
-import { Collapse, CardBody, Card } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-const UserListItem = () => {
-	const [isOpen, setIsOpen] = useState(false);
-
-	const toggle = () => setIsOpen(!isOpen);
-
-	return <div></div>;
+const UserListItem = ({
+	user: { _id, name, avatar, points, latitude, longitude }
+}) => {
+	return (
+		<div>
+			<h2>{name}</h2>
+			<p>{points} Points</p>
+		</div>
+	);
 };
+
+UserListItem.propTypes = {
+	user: PropTypes.object.isRequired
+};
+
+export default UserListItem;
