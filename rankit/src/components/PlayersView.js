@@ -1,10 +1,14 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { getCurrentUser, updateVote } from '../actions/userActions';
+import React, { Fragment } from 'react';
+import { updateVote } from '../actions/userActions';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from './Spinner';
+import { usePosition } from './UsePosition';
 
 const PlayersView = ({ updateVote, auth: { user } }) => {
+	const { latitude, longitude, error } = usePosition(true);
+	console.log(latitude);
+
 	return user === null ? (
 		<Spinner />
 	) : (
@@ -31,7 +35,6 @@ const PlayersView = ({ updateVote, auth: { user } }) => {
 };
 
 PlayersView.propTypes = {
-	getCurrentUser: PropTypes.func.isRequired,
 	updateVote: PropTypes.func.isRequired,
 	auth: PropTypes.object.isRequired
 };
