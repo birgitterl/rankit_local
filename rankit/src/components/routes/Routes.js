@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import AdminHub from '../AdminHub';
+import AdminHub from '../AdminHub/AdminHub';
 import PlayersView from '../PlayersView';
-import UserList from '../UserListBirgit';
+import UserList from '../AdminHub/UserListBirgit';
 import Container from 'reactstrap/es/Container';
 
 const Routes = () => {

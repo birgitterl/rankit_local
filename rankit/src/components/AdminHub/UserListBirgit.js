@@ -1,9 +1,9 @@
 import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Spinner from './Spinner';
+import Spinner from '../Spinner';
 import ListItem from './UserListItem';
-import { getUsers } from '../actions/userActions';
+import { getUsers } from '../../actions/userActions';
 import { ListGroup } from 'reactstrap';
 
 const UserListBirgit = ({ getUsers, userState: { users, loading } }) => {
@@ -18,7 +18,7 @@ const UserListBirgit = ({ getUsers, userState: { users, loading } }) => {
 				<Spinner />
 			) : (
 				<Fragment>
-					<h1>Online Players</h1>
+					<h5>Online Players</h5>
 					<ListGroup>
 						{users.map(user => (
 							<ListItem key={user._id} user={user} />

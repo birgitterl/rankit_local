@@ -37,7 +37,7 @@ router.post(
 			// Fill user object fields
 			const userFields = {};
 			userFields.name = name;
-			userFields.avatar = `/myAvatars/100/${name}`;
+			userFields.avatar = `/myAvatars/75/${name}`;
 			userFields.location = {};
 			userFields.location.latitude = 14;
 			userFields.location.longitude = 12;

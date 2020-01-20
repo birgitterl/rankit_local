@@ -27,7 +27,7 @@ const UserListItem = ({
 		<ListGroupItem>
 			<div>
 				<p onClick={toggle}>
-					<h2>{name}</h2>
+					<h5>{name}</h5>
 					<p>{points} Points</p>
 				</p>
 				<Collapse isOpen={isOpen}>
@@ -35,7 +35,7 @@ const UserListItem = ({
 						<CardBody>
 							<Container>
 								<Row>
-									<Col xs="3">
+									<Col xs="5">
 										<img
 											src={avatar}
 											className="rounded-circle"

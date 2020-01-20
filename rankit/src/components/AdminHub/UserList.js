@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getCurrentUser, getUsers } from '../actions/userActions';
+import { getCurrentUser, getUsers } from '../../actions/userActions';
 
 class UserList extends Component {
 	render() {
