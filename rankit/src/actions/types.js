@@ -12,3 +12,5 @@ export const REMOVE_ALERT = 'REMOVE_ALERT';
 export const USER_ERROR = 'USER_ERROR';
 export const AUTH_ERROR = 'AUTH_ERROR';
 export const LOGOUT = 'LOGOUT';
+export const GET_LOCATION = 'GET_LOCATION';
+export const LOCATION_ERROR = 'LOCATION_ERROR';
