@@ -13,7 +13,6 @@ import {
 import LocationMap from './LocationMap';
 import UserList from './UserList';
 
-
 class AdminHub extends Component {
 	constructor(props) {
 		super(props);
@@ -56,9 +55,7 @@ class AdminHub extends Component {
 				<div class="map">
 					<LocationMap />
 				</div>
-
-
-			</div >
+			</div>
 		);
 	}
 }
