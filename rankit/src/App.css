@@ -33,3 +33,19 @@
     font-weight: bold;
     text-align: center;
 }
+
+.leaflet-container {
+    width: 60%;
+    height: 500px;
+}
+
+.list {
+    float: left;
+    width: 20%;
+    padding: 20px;
+}
+.map {
+    float: left;
+    width: 80%;
+    padding: 20px;
+}

@@ -1,4 +1,3 @@
-//TODO: Admin-Button, insert name field, submit button
 import React, { Component } from 'react';
 import axios from 'axios';
 import {
@@ -11,6 +10,9 @@ import {
 	Label,
 	Col
 } from 'reactstrap';
+import LocationMap from './LocationMap';
+import UserList from './UserList';
+
 
 class AdminHub extends Component {
 	constructor(props) {
@@ -47,7 +49,16 @@ class AdminHub extends Component {
 						Get
 					</Button>
 				</Container>
-			</div>
+
+				<div class="list">
+					<UserList />
+				</div>
+				<div class="map">
+					<LocationMap />
+				</div>
+
+
+			</div >
 		);
 	}
 }
