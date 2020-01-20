@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Spinner from './Spinner';
 import ListItem from './UserListItem';
 import { getUsers } from '../actions/userActions';
-import { ListGroup, ListGroupItem } from 'reactstrap';
+import { ListGroup } from 'reactstrap';
 
 const UserListBirgit = ({ getUsers, userState: { users, loading } }) => {
 	useEffect(() => {
@@ -21,9 +21,7 @@ const UserListBirgit = ({ getUsers, userState: { users, loading } }) => {
 					<h1>Online Players</h1>
 					<ListGroup>
 						{users.map(user => (
-							<ListGroupItem>
-								<ListItem key={user._id} user={user} />
-							</ListGroupItem>
+							<ListItem key={user._id} user={user} />
 						))}
 					</ListGroup>
 				</Fragment>
