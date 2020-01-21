@@ -6,7 +6,6 @@ import { getUsers } from '../../actions/userActions';
 import { Icon } from 'leaflet';
 
 
-
 const LocationMap = ({ getUsers, userState: { users, loading } }) => {
 	useEffect(() => {
 		getUsers();
@@ -17,6 +16,7 @@ const LocationMap = ({ getUsers, userState: { users, loading } }) => {
 
 	return (
 		<div>
+			<h5>Locations</h5>
 			<Map center={[48.336405, 14.32049]} zoom={16}>
 				<TileLayer
 					url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -24,18 +24,15 @@ const LocationMap = ({ getUsers, userState: { users, loading } }) => {
 				/>
 
 				{users.map(user => (
-
 					<Marker
-
 						key={user._id}
 						position={[user.location.latitude, user.location.longitude]}
 						onClick={() => {
 							setActiveMarker(user);
 						}}
-
 					/>
-
 				))}
+
 				{activeMarker && (
 					<Popup
 						position={[activeMarker.location.latitude, activeMarker.location.longitude]}
@@ -51,7 +48,7 @@ const LocationMap = ({ getUsers, userState: { users, loading } }) => {
 								className="rounded-circle"
 								alt="Your Avatar"
 							/>
-							<p>[{activeMarker.location.latitude},{activeMarker.location.longitude}]</p>
+							<p>[{activeMarker.location.latitude}, {activeMarker.location.longitude}]</p>
 
 						</div>
 					</Popup>
