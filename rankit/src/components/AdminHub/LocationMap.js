@@ -3,20 +3,17 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import { getUsers } from '../../actions/userActions';
-import L from 'leaflet';
+import { Icon } from 'leaflet';
 
-//TODO: icon not found
-const runner = L.icon({
-	iconUrl: 'runner.png',
-	iconSize: [32, 38]
-	//iconAnchor: [25, 16]
-});
+
 
 const LocationMap = ({ getUsers, userState: { users, loading } }) => {
 	useEffect(() => {
 		getUsers();
 	}, [getUsers]);
 	users.map(user => console.log(user));
+
+	const [activeMarker, setActiveMarker] = React.useState(null);
 
 	return (
 		<div>
@@ -29,12 +26,36 @@ const LocationMap = ({ getUsers, userState: { users, loading } }) => {
 				{users.map(user => (
 
 					<Marker
+
 						key={user._id}
 						position={[user.location.latitude, user.location.longitude]}
-						icon={runner}
+						onClick={() => {
+							setActiveMarker(user);
+						}}
+
 					/>
 
 				))}
+				{activeMarker && (
+					<Popup
+						position={[activeMarker.location.latitude, activeMarker.location.longitude]}
+						onClose={() => {
+							setActiveMarker(null);
+						}}
+					>
+						<div>
+							<h3>{activeMarker.name}</h3>
+							<h4>{activeMarker.points}</h4>
+							<img
+								src={activeMarker.avatar}
+								className="rounded-circle"
+								alt="Your Avatar"
+							/>
+							<p>[{activeMarker.location.latitude},{activeMarker.location.longitude}]</p>
+
+						</div>
+					</Popup>
+				)}
 			</Map>
 		</div>
 	);
