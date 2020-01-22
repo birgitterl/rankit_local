@@ -6,10 +6,11 @@ import {
 	DELETE_USER,
 	GET_USERS,
 	GET_USER,
-	UPDATE_LOCATION,
+	FETCH_LOCATION,
 	UPDATE_VOTE,
 	USER_ERROR,
-	LOGOUT
+	LOGOUT,
+	LOCATION_ERROR
 } from '../actions/types';
 
 const initialState = {
@@ -50,7 +51,7 @@ export default function(state = initialState, action) {
 			};
 
 		case GET_USER:
-		case UPDATE_LOCATION:
+		case FETCH_LOCATION:
 		case UPDATE_VOTE:
 			return {
 				...state,
@@ -63,6 +64,12 @@ export default function(state = initialState, action) {
 				error: payload,
 				userLoading: false,
 				user: null
+			};
+
+		case LOCATION_ERROR:
+			return {
+				...state,
+				error: payload
 			};
 
 		case REGISTER_FAIL:

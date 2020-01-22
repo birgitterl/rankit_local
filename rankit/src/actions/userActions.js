@@ -11,7 +11,9 @@ import {
 	REGISTER_FAIL,
 	LOGOUT,
 	UPDATE_VOTE,
-	UPDATE_LOCATION
+	FETCH_LOCATION,
+	UPDATE_LOCATION,
+	LOCATION_ERROR
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import { setAlert } from './alertActions';
@@ -157,24 +159,26 @@ export const updateVote = () => async dispatch => {
 	}
 };
 
-/* update location
-export const updatePosition = ({ latitude, longitude }) => async dispatch => {
-	const config = {
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	};
-	const body = JSON.stringify({ latitude, longitude });
+export const fetchLocation = () => async dispatch => {
+	const geolocation = navigator.geolocation;
+
+	geolocation.getCurrentPosition(position => {
+		console.log(position.coords);
+		dispatch({
+			type: FETCH_LOCATION,
+			payload: position
+		});
+	});
 	try {
-		const res = await axios.put('api/users/location', body, config);
+		const res = await axios.put(`api/users/location`);
 		dispatch({
 			type: UPDATE_LOCATION,
 			payload: res.data
 		});
 	} catch (err) {
 		dispatch({
-			type: USER_ERROR,
+			type: LOCATION_ERROR,
 			payload: { msg: err.response.statusText, status: err.response.status }
 		});
 	}
-};*/
+};

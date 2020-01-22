@@ -1,13 +1,14 @@
-import React, { Fragment } from 'react';
-import { updateVote } from '../actions/userActions';
+import React, { Fragment, useEffect } from 'react';
+import { updateVote, fetchLocation } from '../actions/userActions';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from './Spinner';
 import { usePosition } from './UsePosition';
 
-const PlayersView = ({ updateVote, auth: { user } }) => {
-	const { latitude, longitude, error } = usePosition(true);
-	console.log(latitude);
+const PlayersView = ({ updateVote, fetchLocation, auth: { user } }) => {
+	useEffect(() => {
+		fetchLocation();
+	}, [fetchLocation]);
 
 	return user === null ? (
 		<Spinner />
@@ -36,10 +37,14 @@ const PlayersView = ({ updateVote, auth: { user } }) => {
 
 PlayersView.propTypes = {
 	updateVote: PropTypes.func.isRequired,
+	fetchLocation: PropTypes.func.isRequired,
 	auth: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({
 	auth: state.userReducer
 });
 
-export default connect(mapStateToProps, { updateVote })(PlayersView);
+export default connect(mapStateToProps, {
+	updateVote,
+	fetchPosition: fetchLocation
+})(PlayersView);

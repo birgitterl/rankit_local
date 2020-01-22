@@ -10,7 +10,6 @@ const UserListBirgit = ({ getUsers, userState: { users, loading } }) => {
 	useEffect(() => {
 		getUsers();
 	}, [getUsers]);
-	users.map(user => console.log(user));
 
 	return (
 		<Fragment>

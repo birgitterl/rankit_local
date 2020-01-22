@@ -1,26 +1,27 @@
 import axios from 'axios';
-import { GET_LOCATION } from './types';
+import { FETCH_LOCATION, LOCATION_ERROR, UPDATE_LOCATION } from './types';
 
 // Get location
-export const getLocation = () => async dispatch => {
+export const fetchLocation = () => async dispatch => {
 	const geolocation = navigator.geolocation;
 
-	const location = new Promise((resolve, reject) => {
-		if (!geolocation) {
-			reject(new Error('Not supported'));
-		}
-
-		geolocation.getCurrentPosition(
-			position => {
-				resolve(position);
-			},
-			() => {
-				reject(new Error('Permission denied'));
-			}
-		);
+	geolocation.getCurrentPosition(position => {
+		console.log(position.coords);
+		dispatch({
+			type: FETCH_LOCATION,
+			payload: position
+		});
 	});
-	return {
-		type: GET_LOCATION,
-		payload: location
-	};
+	try {
+		const res = await axios.put(`api/users/location`);
+		dispatch({
+			type: UPDATE_LOCATION,
+			payload: res.data
+		});
+	} catch (err) {
+		dispatch({
+			type: LOCATION_ERROR,
+			payload: { msg: err.response.statusText, status: err.response.status }
+		});
+	}
 };
