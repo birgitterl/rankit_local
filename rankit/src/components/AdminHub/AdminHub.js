@@ -4,17 +4,19 @@ import { Container, Row, Col } from 'reactstrap';
 import LocationMap from './LocationMap';
 import UserListBirgit from './UserListBirgit';
 
+
 const AdminHub = () => {
 	return (
-		<Row>
-			<Col xs="6">
+		<div>
+			<div class="list">
 				<UserListBirgit />
-			</Col>
-			<Col xs="auto" className="map">
+			</div>
+			<div class="map">
 				<LocationMap />
-			</Col>
-		</Row>
+			</div>
+		</div>
 	);
 };
+
 
 export default AdminHub;
