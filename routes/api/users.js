@@ -7,8 +7,32 @@ const auth = require('../../middleware/authMiddleware');
 const User = require('../../models/User');
 
 // TODO needs to be eliminated after location fetching is implemented in the frontend
+/**
+ *@swagger
+ * path:
+ *  /api/users/:
+ *    post:
+ *      tags:
+ *        - users
+ *      summary: Register a new user
+ *      parameters:
+ *        - in: body
+ *          name: body
+ *          description: User object that needs to be registered
+ *          required: true
+ *          schema:
+ *            $ref: '#/definitions/User'
+ *      responses:
+ *        '201':
+ *          description: User successfully created
+ *        '400':
+ *          description: Invalid Input
+ *        '500':
+ *          description: Internal server error
+ */
+
 router.post(
-	'/user',
+	'/',
 	[
 		check('name', 'Name is required')
 			.not()
@@ -41,102 +65,6 @@ router.post(
 			userFields.location = {};
 			userFields.location.latitude = 14;
 			userFields.location.longitude = 12;
-
-			// Create a new user
-			user = new User(userFields);
-
-			// save user to DB
-			await user.save();
-
-			// Return jsonwebtoken (change expires to 3600)
-			const payload = {
-				user: {
-					id: user.id
-				}
-			};
-
-			jwt.sign(
-				payload,
-				config.get('jwtSecret'),
-				{ expiresIn: 360000 },
-				(err, token) => {
-					if (err) throw err;
-					res.json({ token });
-				}
-			);
-		} catch (err) {
-			console.error(err.message);
-			res.status(500).json({ msg: 'Internal server error' });
-		}
-	}
-);
-
-/**
- *@swagger
- * path:
- *  /api/users/:
- *    post:
- *      tags:
- *        - users
- *      summary: Register a new user
- *      parameters:
- *        - in: body
- *          name: body
- *          description: User object that needs to be registered
- *          required: true
- *          schema:
- *            $ref: '#/definitions/User'
- *      responses:
- *        '201':
- *          description: User successfully created
- *        '400':
- *          description: Invalid Input
- *        '500':
- *          description: Internal server error
- */
-
-router.post(
-	'/',
-	[
-		check('name', 'Name is required')
-			.not()
-			.isEmpty(),
-		check('latitude', 'Location latitude is required')
-			.not()
-			.isEmpty(),
-		check('longitude', 'Location longitude is required')
-			.not()
-			.isEmpty()
-	],
-	async (req, res) => {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({ errors: errors.array() });
-		}
-
-		const { name, latitude, longitude } = req.body;
-
-		try {
-			// See if user name exists
-			let user = await User.findOne({ name });
-
-			if (user) {
-				return res.status(400).json({
-					errors: [
-						{
-							msg: 'User already exists, please choose another user name'
-						}
-					]
-				});
-			}
-
-			// Fill user object fields
-			const userFields = {};
-			userFields.name = name;
-			userFields.avatar = `/myAvatars/100/${name}`;
-			userFields.location = {};
-			userFields.location.latitude = latitude;
-			userFields.location.longitude = longitude;
 
 			// Create a new user
 			user = new User(userFields);
@@ -404,12 +332,12 @@ router.put(
 		auth,
 		[
 			//checks for required fields and throws error array if failed
-			(check('latitude', 'Location latitude is required')
+			check('latitude', 'Location latitude is required')
 				.not()
 				.isEmpty(),
 			check('longitude', 'Location longitude is required')
 				.not()
-				.isEmpty())
+				.isEmpty()
 		]
 	],
 	async (req, res) => {
@@ -470,14 +398,9 @@ router.put(
  *           description: Internal server error
  *
  */
-router.delete('me', auth, async (req, res) => {
+router.delete('/me', auth, async (req, res) => {
 	try {
-		const user = await User.findById(req.user.id);
-
-		if (!user) {
-			return res.status(404).json({ msg: 'User not found by id' });
-		}
-		await user.delete();
+		await User.findOneAndDelete({ _id: req.user.id });
 
 		await res.status(200).json({ msg: 'User successfully removed' });
 	} catch (err) {

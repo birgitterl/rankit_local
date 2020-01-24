@@ -1,8 +1,8 @@
-import React, { Component, Fragment, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { registerUser } from '../actions/userActions';
-import { setAlert } from '../actions/alertActions';
+import { registerUser } from '../../actions/userActions';
+import { setAlert } from '../../actions/alertActions';
 import { Button, Form, Input, FormGroup } from 'reactstrap';
 import PropTypes from 'prop-types';
 

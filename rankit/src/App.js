@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AppNavbar from './components/AppNavbar';
-import LandingPage from './components/LandingPage';
+import AppNavbar from './components/layout/AppNavbar';
+import LandingPage from './components/layout/LandingPage';
 import Routes from './components/routes/Routes';
-import Alert from './components/Alert';
+import Alert from './components/layout/Alert';
 import './App.css';
 
 // Redux

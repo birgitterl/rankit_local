@@ -26,10 +26,10 @@ const UserListItem = ({
 	return (
 		<ListGroupItem>
 			<div>
-				<p onClick={toggle}>
+				<div onClick={toggle}>
 					<h5>{name}</h5>
 					<p>{points} Points</p>
-				</p>
+				</div>
 				<Collapse isOpen={isOpen}>
 					<Card>
 						<CardBody>

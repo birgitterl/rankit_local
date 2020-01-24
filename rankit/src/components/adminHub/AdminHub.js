@@ -1,9 +1,6 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import { Container, Row, Col } from 'reactstrap';
+import React from 'react';
 import LocationMap from './LocationMap';
 import UserListBirgit from './UserListBirgit';
-
 
 const AdminHub = () => {
 	return (
@@ -17,6 +14,5 @@ const AdminHub = () => {
 		</div>
 	);
 };
-
 
 export default AdminHub;

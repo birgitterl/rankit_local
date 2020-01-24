@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 export const usePosition = () => {
-	const [position, setPosition] = useState({});
+	const [position, setPosition] = useState({ latitude: 8, longitude: 4 });
 	const [error, setError] = useState(null);
 
 	const onChange = ({ coords }) => {

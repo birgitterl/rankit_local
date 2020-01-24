@@ -3,14 +3,14 @@ import {
 	REGISTER_FAIL,
 	USER_LOADED,
 	AUTH_ERROR,
-	DELETE_USER,
 	GET_USERS,
 	GET_USER,
 	FETCH_LOCATION,
 	UPDATE_VOTE,
 	USER_ERROR,
-	LOGOUT,
-	LOCATION_ERROR
+	LOGOUT_SUCCESS,
+	LOCATION_ERROR,
+	UPDATE_LOCATION
 } from '../actions/types';
 
 const initialState = {
@@ -43,6 +43,7 @@ export default function(state = initialState, action) {
 				isAuthenticated: true,
 				authLoading: false
 			};
+
 		case GET_USERS:
 			return {
 				...state,
@@ -53,11 +54,13 @@ export default function(state = initialState, action) {
 		case GET_USER:
 		case FETCH_LOCATION:
 		case UPDATE_VOTE:
+		case UPDATE_LOCATION:
 			return {
 				...state,
 				user: payload,
 				userLoading: false
 			};
+
 		case USER_ERROR:
 			return {
 				...state,
@@ -73,13 +76,13 @@ export default function(state = initialState, action) {
 			};
 
 		case REGISTER_FAIL:
-		case LOGOUT:
+		case LOGOUT_SUCCESS:
 			localStorage.removeItem('token');
 			return {
 				...state,
 				token: null,
 				isAuthenticated: false,
-				userLoading: false
+				authLoading: false
 			};
 
 		case AUTH_ERROR:
