@@ -1,10 +1,10 @@
-import React, { Fragment, useEffect } from './node_modules/react';
-import PropTypes from './node_modules/prop-types';
-import { connect } from './node_modules/react-redux';
+import React, { Fragment, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import ListItem from './UserListItem';
 import { getUsers } from '../../actions/userActions';
-import { ListGroup } from './node_modules/reactstrap';
+import { ListGroup } from 'reactstrap';
 
 const UserListBirgit = ({ getUsers, userState: { users, userLoading } }) => {
 	useEffect(() => {
@@ -16,15 +16,15 @@ const UserListBirgit = ({ getUsers, userState: { users, userLoading } }) => {
 			{userLoading ? (
 				<Spinner />
 			) : (
-					<Fragment>
-						<h5>Online Players</h5>
-						<ListGroup>
-							{users.map(user => (
-								<ListItem key={user._id} user={user} />
-							))}
-						</ListGroup>
-					</Fragment>
-				)}
+				<Fragment>
+					<h5>Online Players</h5>
+					<ListGroup>
+						{users.map(user => (
+							<ListItem key={user._id} user={user} />
+						))}
+					</ListGroup>
+				</Fragment>
+			)}
 		</Fragment>
 	);
 };

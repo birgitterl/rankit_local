@@ -1,9 +1,9 @@
-import React, { useEffect } from './node_modules/react';
-import { connect } from './node_modules/react-redux';
-import PropTypes from './node_modules/prop-types';
-import { Map, Marker, Popup, TileLayer } from './node_modules/react-leaflet';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import { getUsers } from '../../actions/userActions';
-import { Icon } from './node_modules/leaflet';
+import { Icon } from 'leaflet';
 
 const LocationMap = ({ getUsers, userState: { users, loading } }) => {
 	useEffect(() => {
