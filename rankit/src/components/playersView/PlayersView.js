@@ -10,7 +10,7 @@ const PlayersView = ({ updateVote, updateLocation, auth: { user } }) => {
 	useEffect(() => {
 		updateLocation(latitude, longitude);
 	}, [updateLocation, latitude, longitude]);
-	console.log('Latitude: ' + latitude + ', Longitude: ' + longitude);
+	//console.log('Latitude: ' + latitude + ', Longitude: ' + longitude);
 
 	return user === null ? (
 		<Spinner />

@@ -10,7 +10,6 @@ export const usePosition = () => {
 			latitude: coords.latitude,
 			longitude: coords.longitude
 		});
-		console.log(coords.latitude);
 	};
 
 	const onError = error => {

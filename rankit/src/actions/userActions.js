@@ -134,17 +134,14 @@ export const updateVote = () => async dispatch => {
 };
 
 // update Location
-export const updateLocation = (
-	{ latitude },
-	{ longitude }
-) => async dispatch => {
+export const updateLocation = (latitude, longitude) => async dispatch => {
 	const config = {
 		headers: {
 			'Content-Type': 'application/json'
 		}
 	};
 	const body = JSON.stringify({ latitude: latitude, longitude: longitude });
-
+	console.log(latitude + '; ' + longitude);
 	try {
 		const res = await axios.put('api/users/location', body, config);
 		dispatch({
@@ -159,7 +156,7 @@ export const updateLocation = (
 	}
 };
 
-// TODO: check if still neede --> else check if route is needed?
+// TODO: check if still needed --> else check if route is needed?
 // Get user by ID
 export const getUser = id => dispatch => {
 	axios.get(`/api/users/${id}`).then(res =>
