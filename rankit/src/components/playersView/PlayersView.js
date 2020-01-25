@@ -1,13 +1,15 @@
-import React, { Fragment } from 'react';
-import { updateVote } from '../../actions/userActions';
+import React, { Fragment, useEffect } from 'react';
+import { updateLocation, updateVote } from '../../actions/userActions';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import { usePosition } from './UsePosition';
 
-const PlayersView = ({ updateVote, auth: { user } }) => {
+const PlayersView = ({ updateVote, updateLocation, auth: { user } }) => {
 	const { latitude, longitude /*,error*/ } = usePosition();
-
+	useEffect(() => {
+		updateLocation(latitude, longitude);
+	}, [updateLocation, latitude, longitude]);
 	console.log('Latitude: ' + latitude + ', Longitude: ' + longitude);
 
 	return user === null ? (
@@ -37,6 +39,7 @@ const PlayersView = ({ updateVote, auth: { user } }) => {
 
 PlayersView.propTypes = {
 	updateVote: PropTypes.func.isRequired,
+	updateLocation: PropTypes.func.isRequired,
 	auth: PropTypes.object.isRequired
 };
 const mapStateToProps = state => ({
@@ -44,5 +47,6 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-	updateVote
+	updateVote,
+	updateLocation
 })(PlayersView);

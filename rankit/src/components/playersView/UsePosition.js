@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { updateLocation } from '../../actions/userActions';
 
 export const usePosition = () => {
 	const [position, setPosition] = useState({ latitude: 8, longitude: 4 });
@@ -9,6 +10,7 @@ export const usePosition = () => {
 			latitude: coords.latitude,
 			longitude: coords.longitude
 		});
+		console.log(coords.latitude);
 	};
 
 	const onError = error => {

@@ -143,7 +143,7 @@ export const updateLocation = (
 			'Content-Type': 'application/json'
 		}
 	};
-	const body = JSON.stringify({ latitude, longitude });
+	const body = JSON.stringify({ latitude: latitude, longitude: longitude });
 
 	try {
 		const res = await axios.put('api/users/location', body, config);
