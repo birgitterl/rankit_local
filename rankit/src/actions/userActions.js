@@ -76,6 +76,7 @@ export const logout = () => async dispatch => {
 			type: LOGOUT_SUCCESS
 		});
 		dispatch(setAlert('Your user has been permanently deleted', 'danger'));
+		dispatch(setAlert('Enter your name to restart the game again', 'success'));
 	} catch (err) {
 		dispatch({
 			type: USER_ERROR,
