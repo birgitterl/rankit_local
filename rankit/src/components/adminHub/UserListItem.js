@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from './node_modules/react';
+import PropTypes from './node_modules/prop-types';
 import {
 	ListGroupItem,
 	Collapse,
@@ -8,7 +8,7 @@ import {
 	Container,
 	Row,
 	Col
-} from 'reactstrap';
+} from './node_modules/reactstrap';
 
 const UserListItem = ({
 	user: {
